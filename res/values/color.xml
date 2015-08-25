@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="content_background">#f8f8f8</color>
+    <color name="pencil_2B_color">#40484D</color>
+    <color name="pencil_color">#717272</color>
+    <color name="text_color">#717272</color>
+    <color name="shadow_start_level_1">#40000000</color>
+    <color name="shadow_center_level_1">#000000</color>
+    <color name="shadow_end_level_1">#50000000</color>
+    <color name="green">#118F77</color>
+    <color name="blue">#427FED</color>
+    <color name="red">#A52714</color>
+    <color name="grey">#cccccc</color>
+    <color name="translucence">#30000000</color>
+    <color name="cream">#F1F1F1</color>
+
+</resources>

@@ -1,0 +1,13 @@
+<resources xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <style name="AppBaseTheme" parent="Theme.AppCompat.Light.NoActionBar"></style>
+
+    <style name="AppTheme" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="colorPrimary">@color/material_deep_teal_500</item>
+        <item name="colorPrimaryDark">@color/material_deep_teal_500</item>
+        <item name="android:textColorPrimary">@color/green</item>
+        <item name="android:textColor">@color/green</item>
+        <item name="android:windowBackground">@color/background_material_light</item>
+    </style>
+
+</resources>

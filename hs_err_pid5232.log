@@ -1,0 +1,132 @@
+#
+# A fatal error has been detected by the Java Runtime Environment:
+#
+#  Internal Error (javaClasses.cpp:127), pid=5232, tid=2288
+#  fatal error: Invalid layout of preloaded class
+#
+# JRE version:  (8.0_45-b14) (build )
+# Java VM: Java HotSpot(TM) 64-Bit Server VM (25.45-b02 mixed mode windows-amd64 compressed oops)
+# Failed to write core dump. Minidumps are not enabled by default on client versions of Windows
+#
+# If you would like to submit a bug report, please visit:
+#   http://bugreport.java.com/bugreport/crash.jsp
+#
+
+---------------  T H R E A D  ---------------
+
+Current thread (0x00000000022be000):  JavaThread "Unknown thread" [_thread_in_vm, id=2288, stack(0x0000000002660000,0x0000000002760000)]
+
+Stack: [0x0000000002660000,0x0000000002760000]
+Native frames: (J=compiled Java code, j=interpreted, Vv=VM code, C=native code)
+V  [jvm.dll+0x32b57a]
+V  [jvm.dll+0x279873]
+V  [jvm.dll+0x27a509]
+V  [jvm.dll+0x2717a6]
+V  [jvm.dll+0x68183]
+V  [jvm.dll+0x68273]
+V  [jvm.dll+0x7d74a]
+V  [jvm.dll+0x7dab6]
+V  [jvm.dll+0xf2157]
+V  [jvm.dll+0xf24e6]
+V  [jvm.dll+0x20f097]
+V  [jvm.dll+0x240e0a]
+V  [jvm.dll+0x15ba41]
+C  [javaw.exe+0x217e]
+C  [javaw.exe+0xcd17]
+C  [javaw.exe+0xcdab]
+C  [kernel32.dll+0x159cd]
+C  [ntdll.dll+0x2b891]
+
+
+---------------  P R O C E S S  ---------------
+
+Java Threads: ( => current thread )
+
+Other Threads:
+
+=>0x00000000022be000 (exited) JavaThread "Unknown thread" [_thread_in_vm, id=2288, stack(0x0000000002660000,0x0000000002760000)]
+
+VM state:not at safepoint (not fully initialized)
+
+VM Mutex/Monitor currently owned by a thread: None
+
+GC Heap History (0 events):
+No events
+
+Deoptimization events (0 events):
+No events
+
+Internal exceptions (0 events):
+No events
+
+Events (10 events):
+Event: 0.015 loading class java/lang/CharSequence done
+Event: 0.015 loading class java/lang/String done
+Event: 0.015 loading class java/lang/Class
+Event: 0.015 loading class java/lang/reflect/AnnotatedElement
+Event: 0.015 loading class java/lang/reflect/AnnotatedElement done
+Event: 0.015 loading class java/lang/reflect/GenericDeclaration
+Event: 0.015 loading class java/lang/reflect/GenericDeclaration done
+Event: 0.015 loading class java/lang/reflect/Type
+Event: 0.015 loading class java/lang/reflect/Type done
+Event: 0.015 loading class java/lang/Class done
+
+
+Dynamic libraries:
+0x000000013ff00000 - 0x000000013ff37000 	C:\Program Files\Java\jre1.8.0_45\bin\javaw.exe
+0x0000000077bb0000 - 0x0000000077d58000 	C:\Windows\SYSTEM32\ntdll.dll
+0x0000000077a90000 - 0x0000000077baf000 	C:\Windows\system32\kernel32.dll
+0x000007fefdc50000 - 0x000007fefdcbc000 	C:\Windows\system32\KERNELBASE.dll
+0x000007feff050000 - 0x000007feff12b000 	C:\Windows\system32\ADVAPI32.dll
+0x000007fefddd0000 - 0x000007fefde6f000 	C:\Windows\system32\msvcrt.dll
+0x000007fefe1e0000 - 0x000007fefe1ff000 	C:\Windows\SYSTEM32\sechost.dll
+0x000007fefef20000 - 0x000007feff04d000 	C:\Windows\system32\RPCRT4.dll
+0x0000000077990000 - 0x0000000077a8a000 	C:\Windows\system32\USER32.dll
+0x000007fefe110000 - 0x000007fefe177000 	C:\Windows\system32\GDI32.dll
+0x000007fefef10000 - 0x000007fefef1e000 	C:\Windows\system32\LPK.dll
+0x000007fefed90000 - 0x000007fefee59000 	C:\Windows\system32\USP10.dll
+0x000007fefc0f0000 - 0x000007fefc2e4000 	C:\Windows\WinSxS\amd64_microsoft.windows.common-controls_6595b64144ccf1df_6.0.7601.18807_none_fa381d5f175bfb52\COMCTL32.dll
+0x000007fefdf10000 - 0x000007fefdf81000 	C:\Windows\system32\SHLWAPI.dll
+0x000007fefee60000 - 0x000007fefee8e000 	C:\Windows\system32\IMM32.DLL
+0x000007fefe000000 - 0x000007fefe109000 	C:\Windows\system32\MSCTF.dll
+0x0000000068550000 - 0x0000000068622000 	C:\Program Files\Java\jre1.8.0_45\bin\msvcr100.dll
+0x0000000068e20000 - 0x00000000696a3000 	C:\Program Files\Java\jre1.8.0_45\bin\server\jvm.dll
+0x000007fef32f0000 - 0x000007fef32f9000 	C:\Windows\system32\WSOCK32.dll
+0x000007fefdfb0000 - 0x000007fefdffd000 	C:\Windows\system32\WS2_32.dll
+0x000007fefe390000 - 0x000007fefe398000 	C:\Windows\system32\NSI.dll
+0x000007fef9d80000 - 0x000007fef9dbb000 	C:\Windows\system32\WINMM.dll
+0x000007fefca60000 - 0x000007fefca6c000 	C:\Windows\system32\VERSION.dll
+0x0000000077d80000 - 0x0000000077d87000 	C:\Windows\system32\PSAPI.DLL
+0x00000000743d0000 - 0x00000000743df000 	C:\Program Files\Java\jre1.8.0_45\bin\verify.dll
+0x00000000743a0000 - 0x00000000743c9000 	C:\Program Files\Java\jre1.8.0_45\bin\java.dll
+0x0000000074380000 - 0x0000000074396000 	C:\Program Files\Java\jre1.8.0_45\bin\zip.dll
+0x000007fef9e00000 - 0x000007fef9f25000 	C:\Windows\system32\dbghelp.dll
+
+VM Arguments:
+jvm_args: -Dfile.encoding=UTF-8 -Xbootclasspath:E:\Android\android-sdk-windows\platforms\android-22\android.jar 
+java_command: org.redot.clover.print.template.T
+java_class_path (initial): E:\Eclipse Android\esc_pos_print_driver\Printer\bin\classes;E:\Eclipse Android\esc_pos_print_driver\Printer\libs\android-support-v4.jar;E:\Eclipse Android\esc_pos_print_driver\lib_utils\libs\core.jar;E:\Eclipse Android\esc_pos_print_driver\appcompat_v7\libs\android-support-v7-appcompat.jar;E:\Eclipse Android\esc_pos_print_driver\lib_utils\bin\lib_utils.jar;E:\Eclipse Android\esc_pos_print_driver\appcompat_v7\bin\appcompat_v7.jar;E:\Eclipse Android\esc_pos_print_driver\lib_zxing_core\bin\lib_zxing_core.jar;E:\Eclipse Android\esc_pos_print_driver\lib_zxing_integration\bin\lib_zxing_integration.jar
+Launcher Type: SUN_STANDARD
+
+Environment Variables:
+JAVA_HOME=C:\Program Files\Java\jdk1.8.0_40
+PATH=C:/Program Files/Java/jre1.8.0_45/bin/server;C:/Program Files/Java/jre1.8.0_45/bin;C:/Program Files/Java/jre1.8.0_45/lib/amd64;C:\ProgramData\Oracle\Java\javapath;C:\Windows\system32;C:\Windows;C:\Windows\System32\Wbem;C:\Windows\System32\WindowsPowerShell\v1.0\;E:\Android\android-sdk-windows\platform-tools;E:\Android\android-sdk-windows\platform-tools;E:\Android\android-sdk-windows\tools;C:\Program Files\Java\jdk1.8.0_40\bin;C:\Program Files\Java\jdk1.8.0_40\lib;C:\Program Files\Java\jdk1.8.0_40\lib\tools.jar;C:\Program Files\Java\jdk1.8.0_40\lib\dt.jar;D:\Program Files\nodejs\;C:\ProgramData\chocolatey\bin;D:\Program Files\mysql-5.6.24-winx64\bin;D:\android;C:\Users\Administrator\AppData\Roaming\npm;D:\Program Files (x86)\eclipse;
+USERNAME=Administrator
+OS=Windows_NT
+PROCESSOR_IDENTIFIER=Intel64 Family 6 Model 37 Stepping 2, GenuineIntel
+
+
+
+---------------  S Y S T E M  ---------------
+
+OS: Windows 7 , 64 bit Build 7601 (6.1.7601.18798)
+
+CPU:total 4 (2 cores per cpu, 2 threads per core) family 6 model 37 stepping 2, cmov, cx8, fxsr, mmx, sse, sse2, sse3, ssse3, sse4.1, sse4.2, popcnt, ht, tsc, tscinvbit
+
+Memory: 4k page, physical 3988600k(1751092k free), swap 7975348k(3722080k free)
+
+vm_info: Java HotSpot(TM) 64-Bit Server VM (25.45-b02) for windows-amd64 JRE (1.8.0_45-b14), built on Apr 10 2015 10:34:15 by "java_re" with MS VC++ 10.0 (VS2010)
+
+time: Tue May 26 10:56:50 2015
+elapsed time: 0 seconds (0d 0h 0m 0s)
+
