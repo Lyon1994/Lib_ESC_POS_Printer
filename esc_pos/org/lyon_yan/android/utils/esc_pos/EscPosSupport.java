@@ -8,6 +8,7 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import android.graphics.Bitmap;
+import android.util.Log;
 
 /**
  * ESC/POS 打印指令集
@@ -108,18 +109,21 @@ public class EscPosSupport {
 		init();
 	}
 
-	/**
-	 * 执行命令
-	 * 
-	 * @author Lyon_Yan <br/>
-	 *         <b>time</b>: 2015年9月1日 下午2:12:19
-	 * @param command
-	 *            org.lyon_yan.android.utils.esc_pos.COMMAND
-	 * @return
-	 */
-	public boolean process(char[] command) {
+	public boolean clear() {
 		try {
-			socketWriter.write(command);
+			flush();
+			// clear
+			socketWriter.write(0x10);
+			socketWriter.write(0x14);
+			socketWriter.write(0x08);
+			socketWriter.write(8);
+			socketWriter.write(1);
+			socketWriter.write(3);
+			socketWriter.write(20);
+			socketWriter.write(1);
+			socketWriter.write(6);
+			socketWriter.write(28);
+			flush();
 			return true;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -128,23 +132,138 @@ public class EscPosSupport {
 		}
 	}
 
+	public void destory() {
+		try {
+			reset();
+			// clear();
+			socketWriter.close();
+			socketReader.close();
+			client.getOutputStream().close();
+			client.getOutputStream().close();
+			client.close();
+			socketWriter = null;
+			socketReader = null;
+			client = null;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+		}
+	}
+
 	/**
-	 * 写入字符串
+	 * 刷新数据流
 	 * 
 	 * @author Lyon_Yan <br/>
-	 *         <b>time</b>: 2015年9月1日 下午2:13:17
-	 * @param str
+	 *         <b>time</b>: 2015年9月1日 下午2:17:01
 	 * @return
 	 */
-	public boolean write(String str) {
+	public boolean flush() {
 		// TODO Auto-generated method stub
 		try {
-			socketWriter.write(str);
+			socketWriter.flush();
 			return true;
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 			return false;
+		}
+	}
+
+	public String getCharset() {
+		return charset;
+	}
+
+	public String getHost() {
+		return host;
+	}
+
+	public int getPort() {
+		return port;
+	}
+
+	public int getTimeout() {
+		return timeout;
+	}
+
+	public void init() throws IOException {
+		// TODO Auto-generated method stub
+		new Thread() {
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				try {
+					destory();
+					client.connect(new InetSocketAddress(host, port), timeout);// 创建一个socket
+					socketWriter = new PrintWriter(new OutputStreamWriter(
+							client.getOutputStream(), charset));// 创建输入输出数据流
+					socketReader = new DataInputStream(client.getInputStream());
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
+				super.run();
+			}
+		}.start();
+	}
+
+	/**
+	 * 
+	 * @author Lyon_Yan <br/>
+	 *         <b>time</b>: 2015年9月1日 下午12:58:37
+	 * @param bitmap
+	 */
+	public void printBitmap(Bitmap bitmap) {
+		try {
+			// 打印二维码
+			byte[] data = new byte[] { 0x1B, 0x33, 0x00 };
+			reset();
+			socketWriter.write(COMMAND.ALIGN_CENTER);
+			socketWriter.flush();
+			client.getOutputStream().write(data);
+			data[0] = (byte) 0x00;
+			data[1] = (byte) 0x00;
+			data[2] = (byte) 0x00; // 重置参数
+			int pixelColor;
+			byte[] escBmp = COMMAND.IMAGE_BITMAP(bitmap.getWidth());
+			final int line_height = 24;
+			// 每行进行打印
+			for (int i = 0; i < bitmap.getHeight() / line_height + 1; i++) {
+				client.getOutputStream().write(escBmp);
+				for (int j = 0; j < bitmap.getWidth(); j++) {
+					for (int k = 0; k < line_height; k++) {
+						if (((i * line_height) + k) < bitmap.getHeight()) {
+							pixelColor = bitmap.getPixel(j, (i * line_height)
+									+ k);
+							/**
+							 * 当pixelColor小于0时为黑色区域
+							 */
+							if (pixelColor < 0) {
+								/**
+								 * 取k值 的高位上的数据
+								 */
+								data[k / 8] += (byte) (128 >> (k % 8));
+							}
+						}
+					}
+					client.getOutputStream().write(data);
+					// 重置参数
+					data[0] = (byte) 0x00;
+					data[1] = (byte) 0x00;
+					data[2] = (byte) 0x00;
+				}
+				// 换行
+				byte[] byte_send1 = new byte[2];
+				byte_send1[0] = 0x0d;
+				byte_send1[1] = 0x0a;
+				client.getOutputStream().write(byte_send1);
+			}
+			client.getOutputStream().flush();
+			reset();
+			client.getOutputStream().flush();
+		} catch (IOException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -172,7 +291,8 @@ public class EscPosSupport {
 	 * 
 	 * @author Lyon_Yan <br/>
 	 *         <b>time</b>: 2015年9月1日 下午2:47:59
-	 * @param value EAN13的数据源必须是13位的字符
+	 * @param value
+	 *            EAN13的数据源必须是13位的字符
 	 * @return
 	 */
 	public boolean printOneCodeByEAN13(String value) {
@@ -193,16 +313,17 @@ public class EscPosSupport {
 	}
 
 	/**
-	 * 刷新数据流
+	 * 执行命令
 	 * 
 	 * @author Lyon_Yan <br/>
-	 *         <b>time</b>: 2015年9月1日 下午2:17:01
+	 *         <b>time</b>: 2015年9月1日 下午2:12:19
+	 * @param command
+	 *            org.lyon_yan.android.utils.esc_pos.COMMAND
 	 * @return
 	 */
-	public boolean flush() {
-		// TODO Auto-generated method stub
+	public boolean process(char[] command) {
 		try {
-			socketWriter.flush();
+			socketWriter.write(command);
 			return true;
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -211,128 +332,18 @@ public class EscPosSupport {
 		}
 	}
 
-	public void destory() {
-		try {
-			clear();
-			socketWriter.close();
-			socketReader.close();
-			client.getOutputStream().close();
-			client.getOutputStream().close();
-			client.close();
-			socketWriter = null;
-			socketReader = null;
-			client = null;
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-		}
-	}
-
-	public String getHost() {
-		return host;
-	}
-
-	public int getPort() {
-		return port;
-	}
-
-	public int getTimeout() {
-		return timeout;
-	}
-
-	public String getCharset() {
-		return charset;
+	public void reset() {
+		socketWriter.write(COMMAND.INIT);
+		socketWriter.write(COMMAND.ALIGN_LEFT);
+		socketWriter.write(COMMAND.FONT_BOLD_NO);
+		socketWriter.write(COMMAND.FONT_HEIGHT_NO);
+		socketWriter.write(COMMAND.FONT_LARGE_NO);
+		socketWriter.write(COMMAND.FONT_UNDERLINE_NO);
+		socketWriter.write(COMMAND.FONT_WIDTH_NO);
 	}
 
 	public void setCharset(String charset) {
 		this.charset = charset;
-	}
-
-	public void init() throws IOException {
-		// TODO Auto-generated method stub
-		destory();
-		client.connect(new InetSocketAddress(host, port), timeout);// 创建一个socket
-		socketWriter = new PrintWriter(new OutputStreamWriter(
-				client.getOutputStream(), charset));// 创建输入输出数据流
-		socketReader = new DataInputStream(client.getInputStream());
-	}
-
-	public boolean clear() {
-		try {
-			flush();
-			// clear
-			socketWriter.write(0x10);
-			socketWriter.write(0x14);
-			socketWriter.write(0x08);
-			socketWriter.write(8);
-			socketWriter.write(1);
-			socketWriter.write(3);
-			socketWriter.write(20);
-			socketWriter.write(1);
-			socketWriter.write(6);
-			socketWriter.write(28);
-			flush();
-			return true;
-		} catch (Exception e) {
-			// TODO: handle exception
-			e.printStackTrace();
-			return false;
-		}
-	}
-
-	/**
-	 * 
-	 * @author Lyon_Yan <br/>
-	 *         <b>time</b>: 2015年9月1日 下午12:58:37
-	 * @param bitmap
-	 */
-	public void printBitmap(Bitmap bitmap) {
-		try {
-			// 打印二维码
-			// byte[] data = new byte[] { 0x1B, 0x33, 0x00 };
-			// // client.getOutputStream().write(data);
-			// data[0] = (byte) 0x00;
-			// data[1] = (byte) 0x00;
-			// data[2] = (byte) 0x00; // 重置参数
-			byte[] data = new byte[] { 0x00, 0x00, 0x00 };
-			int pixelColor;
-			byte[] escBmp = COMMAND.IMAGE_BITMAP(bitmap.getWidth());
-			final int line_height = 24;
-			// 每行进行打印
-			for (int i = 0; i < bitmap.getHeight() / line_height + 1; i++) {
-				client.getOutputStream().write(escBmp);
-				for (int j = 0; j < bitmap.getWidth(); j++) {
-					for (int k = 0; k < line_height; k++) {
-						if (((i * line_height) + k) < bitmap.getHeight()) {
-							pixelColor = bitmap.getPixel(j, (i * line_height)
-									+ k);
-							/**
-							 * 当pixelColor小于0时为黑色区域
-							 */
-							if (pixelColor < 0) {
-								data[k / 8] += (byte) (128 >> (k % 8));
-							}
-						}
-					}
-					client.getOutputStream().write(data);
-					// 重置参数
-					data[0] = (byte) 0x00;
-					data[1] = (byte) 0x00;
-					data[2] = (byte) 0x00;
-				}
-				client.getOutputStream().flush();
-				// 换行
-				byte[] byte_send1 = new byte[2];
-				byte_send1[0] = 0x0d;
-				byte_send1[1] = 0x0a;
-				client.getOutputStream().write(byte_send1);
-			}
-			client.getOutputStream().flush();
-		} catch (IOException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
 	}
 
 	public void setHost(String host) {
@@ -345,5 +356,25 @@ public class EscPosSupport {
 
 	public void setTimeout(int timeout) {
 		this.timeout = timeout;
+	}
+
+	/**
+	 * 写入字符串
+	 * 
+	 * @author Lyon_Yan <br/>
+	 *         <b>time</b>: 2015年9月1日 下午2:13:17
+	 * @param str
+	 * @return
+	 */
+	public boolean write(String str) {
+		// TODO Auto-generated method stub
+		try {
+			socketWriter.write(str);
+			return true;
+		} catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return false;
+		}
 	}
 }

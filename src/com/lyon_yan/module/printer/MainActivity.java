@@ -45,7 +45,7 @@ public class MainActivity extends AppCompatActivity {
 	private void initView() {
 		// TODO Auto-generated method stub
 		ip = (AppCompatEditText) findViewById(R.id.editText1);
-		ip.setText("192.168.1.52");
+		ip.setText("192.168.1.223");
 		cmd = (AppCompatEditText) findViewById(R.id.editText2);
 		cmd.setText("print");
 		open = (AppCompatButton) findViewById(R.id.button1);
@@ -77,6 +77,7 @@ public class MainActivity extends AppCompatActivity {
 								}
 								escPosSupport = new EscPosSupport(ip.getText()
 										.toString(), 9100, 1000);
+								escPosSupport.setCharset("GBK");
 								handler.post(new Runnable() {
 									@Override
 									public void run() {
@@ -85,7 +86,7 @@ public class MainActivity extends AppCompatActivity {
 										open.setVisibility(View.GONE);
 									}
 								});
-								escPosSupport.write("已連接打印機...\n");
+								escPosSupport.write("已連接打印機...\r\n");
 								escPosSupport.flush();
 							} catch (IOException e) {
 								// TODO Auto-generated catch block
@@ -171,21 +172,14 @@ public class MainActivity extends AppCompatActivity {
 		escPosSupport.println("\r\n");
 		try {
 			escPosSupport.printBitmap(QRFactory.createQRCode(
-					"http://www.baidu.com", 500));
-			escPosSupport.println("\r\n");
-			escPosSupport.println("\r\n");
+					"http://www.baidu.com", 100));
 			escPosSupport.println("\r\n");
 		} catch (WriterException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
-		escPosSupport.printOneCodeByEAN13("2013062900001");
-
-		escPosSupport.println("\r\n");
-		escPosSupport.println("\r\n");
-		escPosSupport.println("\r\n");
-		escPosSupport.println("\r\n");
+		// escPosSupport.printOneCodeByEAN13("2013062900001");
 		escPosSupport.process(COMMAND.VOICE);
 		escPosSupport.flush();
 		escPosSupport.process(COMMAND.CUT);
