@@ -333,13 +333,13 @@ public class EscPosSupport {
 	}
 
 	public void reset() {
-		socketWriter.write(COMMAND.INIT);
-		socketWriter.write(COMMAND.ALIGN_LEFT);
-		socketWriter.write(COMMAND.FONT_BOLD_NO);
-		socketWriter.write(COMMAND.FONT_HEIGHT_NO);
-		socketWriter.write(COMMAND.FONT_LARGE_NO);
-		socketWriter.write(COMMAND.FONT_UNDERLINE_NO);
-		socketWriter.write(COMMAND.FONT_WIDTH_NO);
+			socketWriter.write(COMMAND.INIT);
+			socketWriter.write(COMMAND.ALIGN_LEFT);
+			socketWriter.write(COMMAND.FONT_BOLD_NO);
+			socketWriter.write(COMMAND.FONT_HEIGHT_NO);
+			socketWriter.write(COMMAND.FONT_LARGE_NO);
+			socketWriter.write(COMMAND.FONT_UNDERLINE_NO);
+			socketWriter.write(COMMAND.FONT_WIDTH_NO);
 	}
 
 	public void setCharset(String charset) {
