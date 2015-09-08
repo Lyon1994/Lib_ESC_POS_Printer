@@ -136,11 +136,12 @@ public class EscPosSupport {
 		try {
 			reset();
 			// clear();
-			socketWriter.close();
-			socketReader.close();
-			client.getOutputStream().close();
-			client.getOutputStream().close();
-			client.close();
+			if (socketWriter != null)
+				socketWriter.close();
+			if (socketReader != null)
+				socketReader.close();
+			if (client != null)
+				client.close();
 			socketWriter = null;
 			socketReader = null;
 			client = null;
@@ -185,22 +186,20 @@ public class EscPosSupport {
 		return timeout;
 	}
 
+	/**
+	 * a thread init
+	 * 
+	 * @author Lyon_Yan <br/>
+	 *         <b>time</b>: 2015年9月8日 上午9:29:51
+	 * @throws IOException
+	 */
 	public void init() throws IOException {
 		// TODO Auto-generated method stub
 		new Thread() {
 			@Override
 			public void run() {
 				// TODO Auto-generated method stub
-				try {
-					destory();
-					client.connect(new InetSocketAddress(host, port), timeout);// 创建一个socket
-					socketWriter = new PrintWriter(new OutputStreamWriter(
-							client.getOutputStream(), charset));// 创建输入输出数据流
-					socketReader = new DataInputStream(client.getInputStream());
-				} catch (Exception e) {
-					// TODO: handle exception
-					e.printStackTrace();
-				}
+				checking();
 				super.run();
 			}
 		}.start();
@@ -332,7 +331,30 @@ public class EscPosSupport {
 		}
 	}
 
+	/**
+	 * no thread init
+	 * 
+	 * @author Lyon_Yan <br/>
+	 *         <b>time</b>: 2015年9月8日 上午9:30:20
+	 */
+	public void checking() {
+		destory();
+		try {
+			if (client == null) {
+				client = new Socket();
+			}
+			client.connect(new InetSocketAddress(host, port), timeout);
+			socketWriter = new PrintWriter(new OutputStreamWriter(
+					client.getOutputStream(), charset));// 创建输入输出数据流
+			socketReader = new DataInputStream(client.getInputStream());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}// 创建一个socket
+	}
+
 	public void reset() {
+		if (socketWriter != null) {
 			socketWriter.write(COMMAND.INIT);
 			socketWriter.write(COMMAND.ALIGN_LEFT);
 			socketWriter.write(COMMAND.FONT_BOLD_NO);
@@ -340,6 +362,7 @@ public class EscPosSupport {
 			socketWriter.write(COMMAND.FONT_LARGE_NO);
 			socketWriter.write(COMMAND.FONT_UNDERLINE_NO);
 			socketWriter.write(COMMAND.FONT_WIDTH_NO);
+		}
 	}
 
 	public void setCharset(String charset) {
