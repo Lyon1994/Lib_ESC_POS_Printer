@@ -343,6 +343,14 @@ public class EscPosSupport {
 			if (client == null) {
 				client = new Socket();
 			}
+			if(client.isConnected()){
+				if (socketWriter != null)
+					socketWriter.close();
+				if (socketReader != null)
+					socketReader.close();
+				if (client != null)
+					client.close();
+			}
 			client.connect(new InetSocketAddress(host, port), timeout);
 			socketWriter = new PrintWriter(new OutputStreamWriter(
 					client.getOutputStream(), charset));// 创建输入输出数据流
