@@ -347,9 +347,12 @@ public class EscPosSupport {
 							socketWriter.close();
 						if (socketReader != null)
 							socketReader.close();
-						if (client != null)
+						if (client != null){
+							client.shutdownInput();
+							client.shutdownOutput();
 							client.close();
 							client = new Socket();
+						}
 					} else {
 						destory();
 						client = new Socket();
