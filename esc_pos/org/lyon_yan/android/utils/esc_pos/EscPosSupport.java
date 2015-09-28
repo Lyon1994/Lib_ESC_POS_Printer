@@ -338,7 +338,7 @@ public class EscPosSupport {
 	 */
 	public void checking() {
 		try {
-			if (client== null) {
+			if (client == null) {
 				client = new Socket();
 			} else {
 				try {
@@ -349,6 +349,7 @@ public class EscPosSupport {
 							socketReader.close();
 						if (client != null)
 							client.close();
+							client = new Socket();
 					} else {
 						destory();
 						client = new Socket();
