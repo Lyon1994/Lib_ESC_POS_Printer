@@ -8,7 +8,6 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import android.graphics.Bitmap;
-import android.util.Log;
 
 /**
  * ESC/POS 打印指令集
@@ -338,18 +337,26 @@ public class EscPosSupport {
 	 *         <b>time</b>: 2015年9月8日 上午9:30:20
 	 */
 	public void checking() {
-		destory();
 		try {
-			if (client == null) {
+			if (client!= null) {
 				client = new Socket();
-			}
-			if(client.isConnected()){
-				if (socketWriter != null)
-					socketWriter.close();
-				if (socketReader != null)
-					socketReader.close();
-				if (client != null)
-					client.close();
+			} else {
+				try {
+					if (client.isConnected()) {
+						if (socketWriter != null)
+							socketWriter.close();
+						if (socketReader != null)
+							socketReader.close();
+						if (client != null)
+							client.close();
+					} else {
+						destory();
+						client = new Socket();
+					}
+				} catch (Exception e) {
+					// TODO: handle exception
+					e.printStackTrace();
+				}
 			}
 			client.connect(new InetSocketAddress(host, port), timeout);
 			socketWriter = new PrintWriter(new OutputStreamWriter(
