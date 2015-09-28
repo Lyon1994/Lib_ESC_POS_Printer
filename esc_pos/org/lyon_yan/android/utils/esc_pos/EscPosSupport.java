@@ -338,7 +338,7 @@ public class EscPosSupport {
 	 */
 	public void checking() {
 		try {
-			if (client!= null) {
+			if (client== null) {
 				client = new Socket();
 			} else {
 				try {
