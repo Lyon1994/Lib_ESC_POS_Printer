@@ -347,20 +347,17 @@ public class EscPosSupport {
 							socketWriter.close();
 						if (socketReader != null)
 							socketReader.close();
-						if (client != null){
-							client.shutdownInput();
-							client.shutdownOutput();
+						if (client != null) {
 							client.close();
-							client = new Socket();
 						}
 					} else {
 						destory();
-						client = new Socket();
 					}
 				} catch (Exception e) {
 					// TODO: handle exception
 					e.printStackTrace();
 				}
+				client = new Socket();
 			}
 			client.connect(new InetSocketAddress(host, port), timeout);
 			socketWriter = new PrintWriter(new OutputStreamWriter(
