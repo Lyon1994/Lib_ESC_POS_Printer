@@ -88,7 +88,7 @@ public class EscPosSupport {
 	private String host = "192.168.1.52";
 	private int port = 9100;
 	private String charset = "GBK";
-	private int timeout = 1000;
+	private int timeout = 2000;
 
 	public EscPosSupport(String host, int port, int timeout) throws IOException {
 		super();
@@ -366,6 +366,12 @@ public class EscPosSupport {
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+			try {
+				client.connect(new InetSocketAddress(host, port), timeout);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 		}// 创建一个socket
 	}
 
